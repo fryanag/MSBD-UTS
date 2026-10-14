@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>UMKM SmartStock | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"
+            defer></script>
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">S</div>
+                <div>
+                    <h2>SmartStock</h2>
+                    <p>UMKM Management</p>
+                </div>
+            </div>
+
+            <div class="nav-label">MENU UTAMA</div>
+
+            <nav>
+                <a href="#dashboard" class="nav-item active">
+                    <span>▦</span> Dashboard
+                </a>
+
+                <a href="#produk-terlaris" class="nav-item">
+                    <span>▤</span> Analisis Penjualan
+                </a>
+
+                <a href="#stok-rendah" class="nav-item">
+                    <span>⚑</span> Peringatan Stok
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="status-dot"></div>
+                <div>
+                    <strong>SmartStock aktif</strong>
+                    <p>PostgreSQL Database</p>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content" id="dashboard">
+
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">INVENTORY & BUSINESS ANALYTICS</p>
+                    <h1>Dashboard Overview</h1>
+                    <p class="subtitle">
+                        Pantau performa penjualan dan stok tokomu.
+                    </p>
+                </div>
+
+                <button id="refresh-btn" class="refresh-btn">
+                    ↻ <span>Refresh Data</span>
+                </button>
+            </header>
+
+            <div id="loading" class="notice">
+                Mengambil data dari PostgreSQL...
+            </div>
+
+            <div id="error-message" class="notice error hidden"></div>
+
+            <section class="stats-grid">
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span>Total Omzet</span>
+                        <div class="stat-icon purple">Rp</div>
+                    </div>
+                    <h2 id="total-revenue">Rp0</h2>
+                    <p class="stat-caption">
+                        Akumulasi seluruh penjualan
+                    </p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span>Total Transaksi</span>
+                        <div class="stat-icon blue">▤</div>
+                    </div>
+                    <h2 id="total-transactions">0</h2>
+                    <p class="stat-caption">
+                        Transaksi tercatat di database
+                    </p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span>Total Produk</span>
+                        <div class="stat-icon green">▦</div>
+                    </div>
+                    <h2 id="total-products">0</h2>
+                    <p class="stat-caption">
+                        Produk terdaftar
+                    </p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <span>Stok Rendah</span>
+                        <div class="stat-icon orange">⚑</div>
+                    </div>
+                    <h2 id="low-stock-count">0</h2>
+                    <p class="stat-caption">
+                        Produk dengan stok ≤ 10 unit
+                    </p>
+                </article>
+
+            </section>
+
+            <section class="content-grid">
+
+                <article class="panel chart-panel" id="produk-terlaris">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Produk Terlaris</h3>
+                            <p>
+                                Peringkat berdasarkan jumlah unit terjual
+                            </p>
+                        </div>
+                        <span class="panel-tag">TOP 5</span>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="top-products-chart"></canvas>
+                    </div>
+                </article>
+
+                <article class="panel chart-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h3>Tren Penjualan</h3>
+                            <p>Total omzet berdasarkan tanggal transaksi</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="sales-chart"></canvas>
+                    </div>
+                </article>
+
+            </section>
+
+            <section class="panel stock-panel" id="stok-rendah">
+                <div class="panel-header">
+                    <div>
+                        <h3>⚠ Peringatan Stok Rendah</h3>
+                        <p>
+                            Periksa produk berikut agar persediaan
+                            tidak habis.
+                        </p>
+                    </div>
+
+                    <span class="panel-tag warning-tag"
+                          id="stock-label">
+                        0 produk
+                    </span>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID PRODUK</th>
+                                <th>NAMA PRODUK</th>
+                                <th>KATEGORI</th>
+                                <th>STOK TERSISA</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="stock-table-body">
+                            <tr>
+                                <td colspan="5" class="empty-cell">
+                                    Memuat data stok...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <span>© 2026 UMKM SmartStock</span>
+                <span id="last-updated">
+                    Menunggu data...
+                </span>
+            </footer>
+
+        </main>
+    </div>
+</body>
+</html>

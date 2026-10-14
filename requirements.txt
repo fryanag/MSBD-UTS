@@ -1,0 +1,9 @@
+pandas>=2.1
+psycopg2-binary>=2.9
+pymongo>=4.6
+python-dotenv>=1.0
+streamlit>=1.32
+plotly>=5.18
+Flask>=3.0,<4.0
+psycopg2-binary>=2.9,<3.0
+python-dotenv>=1.0,<2.0
